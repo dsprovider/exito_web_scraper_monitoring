@@ -6,6 +6,7 @@
 # pip install selenium==4.18.1
 # pip install pandas==1.5.3
 # pip install fake-useragent==1.5.0
+# pip install numpy==1.24.2
 
 # Imported Libraries
 import pandas as pd
@@ -165,7 +166,8 @@ def main():
 
     # ---- 2. Establish connection with Google Sheets -------------------------
     print(">> Establishing connection with Google Sheets ...")
-    gc = gspread.oauth()
+    # gc = gspread.oauth()
+    gc = gspread.service_account()
     spreadsheet = gc.open_by_url("https://docs.google.com/spreadsheets/d/14XXObjIWzqs0u3F6r42m-H7_9Os6_UX95nLW9y9NkSY/edit?gid=0#gid=0")
     products_sheet  = spreadsheet.sheet1
     print(">> Connection established!")
