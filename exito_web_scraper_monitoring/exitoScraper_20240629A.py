@@ -64,6 +64,7 @@ def setup_driver():
     # Set up Chrome options
     chrome_options = Options()
     chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument(f'user-agent={random_user_agent}')
     # chrome_options.add_argument("--window-size=1500,800")
 
@@ -78,8 +79,8 @@ def update_google_sheet(sheet, product_id, price, seller):
     cell = sheet.find(str(product_id))
     if cell:
         # Assuming the 'Price' is in column 7 and 'Seller' is in column 8
-        sheet.update_cell(cell.row, 7, price)
-        sheet.update_cell(cell.row, 8, seller)
+        sheet.update_cell(cell.row, 8, price)
+        sheet.update_cell(cell.row, 7, seller)
         print(f">> Updated Product ID {product_id} with Price: {price}, Seller: {seller}")
 
 # ============= Site Scrapers ================================================================================================
@@ -180,10 +181,12 @@ def main():
 
 
     # ---- 4. Scrape list of URLs ---------------------------------------------
+    start_time = time.time()
     scrape_urls_list(index_urls_df, products_sheet)
+    print(f"{time.time() - start_time}")
+    
+    print(f">> Execution time: {time.time() - start_time}")
 
-    
-    
 
 if __name__ == "__main__":
     main()
