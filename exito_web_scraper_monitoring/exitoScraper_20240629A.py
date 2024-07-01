@@ -11,7 +11,6 @@
 # Imported Libraries
 import pandas as pd
 import os
-import json
 import time
 import random
 import gspread
@@ -22,7 +21,6 @@ from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-
 
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
@@ -37,7 +35,6 @@ def generate_timestamp():
 
     # Format the datetime as a timestamp string
     timestamp = now.strftime("%Y-%m-%d_%H%M%S")
-    
     return timestamp
 
 
@@ -66,7 +63,6 @@ def setup_driver():
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument(f'user-agent={random_user_agent}')
-    # chrome_options.add_argument("--window-size=1500,800")
 
     # Start the WebDriver and initiate a new browser session
     driver = webdriver.Chrome(options=chrome_options)
@@ -74,13 +70,13 @@ def setup_driver():
 
 # ============= Processing Functions ==========================================================================================
 
-def update_google_sheet(sheet, product_id, price, seller):
+def update_google_sheet(sheet, product_id, price, seller, timestamp):
     # Find the row with the matching Product ID
     cell = sheet.find(str(product_id))
     if cell:
-        # Assuming the 'Price' is in column 7 and 'Seller' is in column 8
-        sheet.update_cell(cell.row, 8, price)
-        sheet.update_cell(cell.row, 7, seller)
+        sheet.update_cell(cell.row, 7, timestamp)
+        sheet.update_cell(cell.row, 9, price)
+        sheet.update_cell(cell.row, 8, seller)
         print(f">> Updated Product ID {product_id} with Price: {price}, Seller: {seller}")
 
 # ============= Site Scrapers ================================================================================================
@@ -98,7 +94,9 @@ def scrape_urls_list(index_urls_df, products_sheet):
 
                 print(f">> Accessing URL: {url}")
                 driver.get(url)
-                sleep_for_random_duration(1.5, 3)
+                sleep_for_random_duration(0.8, 2.3)
+                # sleep_for_random_duration(1, 2.5)
+                # sleep_for_random_duration(1.5, 3)
                 # sleep_for_random_duration(2, 4)
 
             except WebDriverException as e:
@@ -136,7 +134,7 @@ def scrape_urls_list(index_urls_df, products_sheet):
                 print(f"[+] Seller: {seller}")
 
                 print(f">> Successfully scraped data from {url}")
-                update_google_sheet(products_sheet, index, price, seller) # Update the Google Sheets with the scraped data
+                update_google_sheet(products_sheet, index, price, seller, product_timestamp) # Update the Google Sheets with the scraped data
                 print("---------------------------------------------------------------------------------------------------------")
 
             except NoSuchElementException as e:
@@ -172,7 +170,7 @@ def main():
     spreadsheet = gc.open_by_url("https://docs.google.com/spreadsheets/d/14XXObjIWzqs0u3F6r42m-H7_9Os6_UX95nLW9y9NkSY/edit?gid=0#gid=0")
     products_sheet  = spreadsheet.sheet1
     print(">> Connection established!")
-
+    
 
     # ---- 3. Convert Google Sheets data to DataFrame -------------------------
     df = pd.DataFrame(products_sheet.get_all_records())
@@ -182,9 +180,7 @@ def main():
 
     # ---- 4. Scrape list of URLs ---------------------------------------------
     start_time = time.time()
-    scrape_urls_list(index_urls_df, products_sheet)
-    print(f"{time.time() - start_time}")
-    
+    scrape_urls_list(index_urls_df, products_sheet)    
     print(f">> Execution time: {time.time() - start_time}")
 
 
