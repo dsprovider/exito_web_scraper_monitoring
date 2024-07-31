@@ -26,11 +26,11 @@ Follow these simple steps to get MonitoringScrapingTool up and running:
    git clone https://github.com/dsprovider/exito_web_scraper_monitoring.git
    cd exito_web_scraper_monitoring
 
-2. Install Dependencies:
+3. Install Dependencies:
    Make sure you have Python 3.11.1 or higher. Install the necessary packages using pip:
    pip install -r requirements.txt
 
-3. Set Up Crontab:
+5. Set Up Crontab:
    To ensure MonitoringScrapingTool runs on schedule, access your VPS and set up a crontab job. Start by opening your crontab configuration:
    crontab -e
 
