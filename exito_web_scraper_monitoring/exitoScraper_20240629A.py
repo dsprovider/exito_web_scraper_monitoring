@@ -230,9 +230,9 @@ def main():
     # ---- Establish connection with Google Sheets -------------------------
     print(">> Establishing connection with Google Sheets ...")
     gc = gspread.service_account()
-    spreadsheet = gc.open_by_url("https://docs.google.com/spreadsheets/d/14XXObjIWzqs0u3F6r42m-H7_9Os6_UX95nLW9y9NkSY/edit?gid=0#gid=0")
+    spreadsheet = gc.open_by_url("<INSERT_HERE_GOOGLE_SHEET_LINK>")
     products_sheet  = spreadsheet.sheet1
-    historical_record_sheet = spreadsheet.get_worksheet_by_id('350158358')
+    historical_record_sheet = spreadsheet.get_worksheet_by_id('<INSERT_HERE_GOOGLE_SHEET_ID>')
     print(">> Connection established!")
     
 
