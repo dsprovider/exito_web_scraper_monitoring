@@ -53,3 +53,9 @@ Once you have configured the crontab job, your setup should be good to go. To en
 service cron restart
 
 service cron status
+
+
+
+📜 License
+
+This project is licensed under the MIT License.
